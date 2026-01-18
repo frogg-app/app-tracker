@@ -22,6 +22,26 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
     next();
     return;
   }
+  
+  // Skip auth for read-only data endpoints (allow public monitoring)
+  if (req.method === 'GET' && (
+    req.path === '/data' || 
+    req.path === '/processes' || 
+    req.path === '/ports' || 
+    req.path === '/system' ||
+    req.path === '/containers' ||
+    req.path === '/services' ||
+    req.path === '/pods' ||
+    req.path === '/agents'
+  )) {
+    req.user = {
+      userId: 'public',
+      username: 'public',
+      role: 'viewer',
+    };
+    next();
+    return;
+  }
 
   // Check for API token (simple token auth)
   const apiToken = req.headers['x-api-token'] as string;

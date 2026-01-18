@@ -83,10 +83,20 @@ func Load(configFile string) (*Config, error) {
 		return nil, err
 	}
 
-	// Convert interval from seconds to duration
+	// Convert interval from seconds to duration if not already set
 	if cfg.Interval == 0 {
-		cfg.Interval = time.Duration(viper.GetInt("interval")) * time.Second
+		// Try to parse as duration string first (e.g., "10s")
+		intervalStr := viper.GetString("interval")
+		if d, err := time.ParseDuration(intervalStr); err == nil {
+			cfg.Interval = d
+		} else {
+			// Fall back to integer seconds
+			cfg.Interval = time.Duration(viper.GetInt("interval")) * time.Second
+		}
 	}
+
+	// Push interval is already parsed as duration from string like "10s"
+	// No additional conversion needed
 
 	return &cfg, nil
 }
@@ -111,6 +121,18 @@ func setDefaults() {
 	viper.SetDefault("kubernetes.kubelet_url", "http://localhost:10255")
 
 	viper.SetDefault("push.enabled", false)
-	viper.SetDefault("push.interval", 10)
+	viper.SetDefault("push.interval", "10s")
 	viper.SetDefault("push.batch_size", 100)
+	viper.SetDefault("push.server_url", "")
+
+	// Bind environment variables for push mode
+	viper.BindEnv("push.enabled", "APPTRACKER_PUSH_ENABLED")
+	viper.BindEnv("push.server_url", "APPTRACKER_SERVER_WS_URL")
+	viper.BindEnv("push.interval", "APPTRACKER_PUSH_INTERVAL")
+	
+	// Bind environment variables for collector settings
+	viper.BindEnv("interval", "APPTRACKER_COLLECT_INTERVAL")
+	viper.BindEnv("listen", "APPTRACKER_API_ADDR")
+	viper.BindEnv("collectors.docker", "APPTRACKER_ENABLE_DOCKER")
+	viper.BindEnv("collectors.kubernetes", "APPTRACKER_ENABLE_KUBERNETES")
 }

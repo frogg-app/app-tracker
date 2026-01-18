@@ -15,6 +15,7 @@ import (
 	"github.com/your-org/app-tracker/agent/internal/api"
 	"github.com/your-org/app-tracker/agent/internal/collector"
 	"github.com/your-org/app-tracker/agent/internal/config"
+	"github.com/your-org/app-tracker/agent/internal/push"
 )
 
 var (
@@ -105,6 +106,15 @@ func run(cmd *cobra.Command, args []string) error {
 		}
 	}()
 
+	// Start push client if push mode is enabled
+	var pushClient *push.Client
+	if cfg.Push.Enabled && cfg.Push.ServerURL != "" {
+		pushClient = push.NewClient(cfg, manager, logger)
+		if err := pushClient.Start(ctx); err != nil {
+			logger.Error("push client error", zap.Error(err))
+		}
+	}
+
 	// Wait for shutdown signal
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
@@ -112,6 +122,11 @@ func run(cmd *cobra.Command, args []string) error {
 
 	logger.Info("shutting down...")
 	cancel()
+
+	// Stop push client if running
+	if pushClient != nil {
+		pushClient.Stop()
+	}
 
 	if err := server.Shutdown(context.Background()); err != nil {
 		logger.Error("server shutdown error", zap.Error(err))

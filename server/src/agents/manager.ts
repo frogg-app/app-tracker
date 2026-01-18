@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 import { getDatabase } from '../db/index.js';
 import { logger } from '../utils/logger.js';
+import { config } from '../config/index.js';
 
 // Types for agent data
 export interface ProcessInfo {
@@ -170,7 +171,13 @@ export class AgentManager {
 
   constructor() {
     this.loadAgentsFromDB();
-    this.startDemoDataGenerator();
+    // Only start demo data generator if DEMO_MODE is enabled
+    if (config.demoMode) {
+      logger.info('Demo mode enabled - generating fake data');
+      this.startDemoDataGenerator();
+    } else {
+      logger.info('Demo mode disabled - waiting for real agent connections');
+    }
   }
 
   private loadAgentsFromDB(): void {
@@ -330,7 +337,7 @@ export class AgentManager {
     // Generate initial demo data
     this.updateAgentData(demoAgentId, this.generateDemoData());
 
-    // Update every 5 seconds
+    // Update every 5 seconds (interval handle intentionally not saved as this runs for lifetime of process)
     setInterval(() => {
       this.updateAgentData(demoAgentId, this.generateDemoData());
     }, 5000);

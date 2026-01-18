@@ -22,6 +22,9 @@ const envSchema = z.object({
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   LOG_FORMAT: z.enum(['json', 'pretty']).default('json'),
+  
+  // Demo mode - set to 'true' to enable fake data generation
+  DEMO_MODE: z.string().default('false'),
 });
 
 const env = envSchema.parse(process.env);
@@ -52,6 +55,9 @@ export const config = {
     level: env.LOG_LEVEL,
     format: env.LOG_FORMAT,
   },
+  
+  // Demo mode generates fake data when no real agents are connected
+  demoMode: env.DEMO_MODE === 'true',
 };
 
 export type Config = typeof config;
