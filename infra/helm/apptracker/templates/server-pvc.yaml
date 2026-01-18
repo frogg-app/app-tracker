@@ -1,0 +1,17 @@
+{{- if and .Values.server.enabled .Values.server.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "apptracker.fullname" . }}-server
+  labels:
+    {{- include "apptracker.server.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.server.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.server.persistence.size }}
+  {{- if or .Values.server.persistence.storageClass .Values.global.storageClass }}
+  storageClassName: {{ .Values.server.persistence.storageClass | default .Values.global.storageClass }}
+  {{- end }}
+{{- end }}

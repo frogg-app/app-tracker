@@ -1,0 +1,65 @@
+# App Tracker Ingress
+# Configures external access to the application
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apptracker
+  namespace: apptracker
+  labels:
+    app.kubernetes.io/name: apptracker
+  annotations:
+    # Nginx ingress annotations
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # WebSocket support
+    nginx.ingress.kubernetes.io/websocket-services: "apptracker-server"
+    # SSL redirect (uncomment for HTTPS)
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    # Uncomment for cert-manager TLS
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  # Uncomment for TLS
+  # tls:
+  #   - hosts:
+  #       - apptracker.example.com
+  #     secretName: apptracker-tls
+  rules:
+    - host: apptracker.example.com
+      http:
+        paths:
+          # API routes
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: apptracker-server
+                port:
+                  number: 32400
+          # WebSocket route
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: apptracker-server
+                port:
+                  number: 32400
+          # Metrics route (consider restricting access)
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: apptracker-server
+                port:
+                  number: 32400
+          # UI (catch-all, must be last)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: apptracker-ui
+                port:
+                  number: 80

@@ -1,0 +1,67 @@
+# Multi-stage build for Node.js server
+# Stage 1: Install dependencies and build
+FROM node:20-alpine AS builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files first for layer caching
+COPY package.json ./
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build TypeScript
+RUN npm run build
+
+# Prune dev dependencies
+RUN npm prune --production
+
+# Stage 2: Create minimal runtime image
+FROM node:20-alpine
+
+# Labels
+LABEL org.opencontainers.image.title="App Tracker Server" \
+      org.opencontainers.image.description="Central management server for App Tracker" \
+      org.opencontainers.image.vendor="App Tracker" \
+      org.opencontainers.image.source="https://github.com/app-tracker/app-tracker"
+
+WORKDIR /app
+
+# Install runtime dependencies for native modules
+RUN apk add --no-cache \
+    sqlite \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user (use 65532 to avoid conflicts)
+RUN addgroup -g 65532 apptracker && \
+    adduser -u 65532 -G apptracker -s /bin/sh -D apptracker
+
+# Copy built application from builder
+COPY --from=builder /build/dist ./dist
+COPY --from=builder /build/node_modules ./node_modules
+COPY --from=builder /build/package.json ./
+
+# Create data directory for SQLite
+RUN mkdir -p /app/data && chown -R apptracker:apptracker /app
+
+# Switch to non-root user
+USER apptracker
+
+# Environment variables
+ENV NODE_ENV=production \
+    PORT=32400 \
+    DATABASE_PATH=/app/data/apptracker.db
+
+# Expose ports
+EXPOSE 32400
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:32400/health || exit 1
+
+# Default command
+CMD ["node", "dist/index.js"]

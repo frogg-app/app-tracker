@@ -1,0 +1,162 @@
+# Default values for apptracker Helm chart
+# This is a YAML-formatted file.
+
+# Global configuration
+global:
+  imageRegistry: ghcr.io/app-tracker
+  imagePullSecrets: []
+  storageClass: ""
+
+# Server configuration
+server:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: server
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 32400
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    # storageClass: ""
+  
+  env:
+    NODE_ENV: production
+    LOG_LEVEL: info
+    JWT_EXPIRES_IN: 24h
+  
+  # Secrets - override these in production!
+  secrets:
+    jwtSecret: change-me-in-production
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# UI configuration
+ui:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ui
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 80
+  
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Agent configuration
+agent:
+  enabled: true
+  image:
+    repository: agent
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  env:
+    APPTRACKER_COLLECT_INTERVAL: "10s"
+    APPTRACKER_ENABLE_DOCKER: "true"
+    APPTRACKER_ENABLE_KUBERNETES: "true"
+  
+  # Run on master nodes too
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: "{{ .Release.Name }}-server"
+  hosts:
+    - host: apptracker.local
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: server
+        - path: /ws
+          pathType: Prefix
+          service: server
+        - path: /
+          pathType: Prefix
+          service: ui
+  tls: []
+  #  - secretName: apptracker-tls
+  #    hosts:
+  #      - apptracker.local
+
+# Network policies
+networkPolicy:
+  enabled: false
+
+# Pod disruption budgets
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Prometheus monitoring
+prometheus:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s

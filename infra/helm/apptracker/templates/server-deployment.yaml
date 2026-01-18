@@ -1,0 +1,107 @@
+{{- if .Values.server.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "apptracker.fullname" . }}-server
+  labels:
+    {{- include "apptracker.server.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.server.autoscaling.enabled }}
+  replicas: {{ .Values.server.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "apptracker.server.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "32400"
+        prometheus.io/path: "/metrics"
+      labels:
+        {{- include "apptracker.server.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- include "apptracker.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "apptracker.serviceAccountName" . }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: server
+          image: {{ include "apptracker.server.image" . }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 32400
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.server.env.NODE_ENV | quote }}
+            - name: PORT
+              value: "32400"
+            - name: LOG_LEVEL
+              value: {{ .Values.server.env.LOG_LEVEL | quote }}
+            - name: JWT_EXPIRES_IN
+              value: {{ .Values.server.env.JWT_EXPIRES_IN | quote }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "apptracker.fullname" . }}-server
+                  key: jwt-secret
+            - name: DATABASE_PATH
+              value: /app/data/apptracker.db
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            {{- toYaml .Values.server.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: data
+          {{- if .Values.server.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "apptracker.fullname" . }}-server
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      {{- with .Values.server.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

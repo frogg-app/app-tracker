@@ -1,0 +1,35 @@
+# Prometheus Configuration for App Tracker
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers: []
+
+rule_files: []
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # App Tracker Server
+  - job_name: 'apptracker-server'
+    static_configs:
+      - targets: ['server:32400']
+    metrics_path: /metrics
+    scheme: http
+
+  # App Tracker Agents (if running in Docker)
+  - job_name: 'apptracker-agents'
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+    metrics_path: /metrics
+    scheme: http
+
+  # Docker host metrics (if node-exporter is running)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['host.docker.internal:9100']
+    scheme: http

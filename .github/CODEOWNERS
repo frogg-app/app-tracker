@@ -1,0 +1,14 @@
+# App Tracker
+
+**/agent/           @backend-team
+**/server/          @backend-team
+**/ui/              @frontend-team
+**/infra/           @devops-team
+**/docs/            @docs-team
+**/.github/         @devops-team
+
+# Security-sensitive files
+**/SECURITY.md      @security-team
+**/auth.ts          @security-team
+**/auth.go          @security-team
+docker-compose.yml  @devops-team @security-team

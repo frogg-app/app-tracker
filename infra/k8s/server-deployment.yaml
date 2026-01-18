@@ -1,0 +1,119 @@
+# App Tracker Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apptracker-server
+  namespace: apptracker
+  labels:
+    app.kubernetes.io/name: apptracker
+    app.kubernetes.io/component: server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: apptracker
+      app.kubernetes.io/component: server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: apptracker
+        app.kubernetes.io/component: server
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "32400"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: apptracker-server
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: server
+          image: ghcr.io/app-tracker/server:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 32400
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: apptracker-server-config
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: apptracker-server-secrets
+                  key: JWT_SECRET
+            - name: DATABASE_PATH
+              value: /app/data/apptracker.db
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: apptracker-server-data
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: apptracker-server
+  namespace: apptracker
+  labels:
+    app.kubernetes.io/name: apptracker
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apptracker-server-data
+  namespace: apptracker
+  labels:
+    app.kubernetes.io/name: apptracker
+    app.kubernetes.io/component: server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # Uncomment to use a specific storage class
+  # storageClassName: fast-ssd

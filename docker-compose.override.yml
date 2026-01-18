@@ -1,0 +1,28 @@
+# Development overrides for docker-compose
+# Run: docker compose -f docker-compose.yml -f docker-compose.override.yml up
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: ../infra/docker/Dockerfile.server
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    command: ["sh", "-c", "npm install --no-package-lock && npm run dev"]
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

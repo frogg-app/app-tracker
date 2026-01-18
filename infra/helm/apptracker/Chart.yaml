@@ -1,0 +1,19 @@
+apiVersion: v2
+name: apptracker
+description: A Helm chart for App Tracker - Linux Server Rapid Prototyping & Service Tracker
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - monitoring
+  - linux
+  - devops
+  - containers
+  - kubernetes
+maintainers:
+  - name: App Tracker Team
+    email: team@apptracker.io
+home: https://github.com/app-tracker/app-tracker
+sources:
+  - https://github.com/app-tracker/app-tracker
+icon: https://raw.githubusercontent.com/app-tracker/app-tracker/main/docs/logo.png

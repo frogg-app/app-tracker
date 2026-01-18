@@ -1,0 +1,8 @@
+# App Tracker Kubernetes Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apptracker
+  labels:
+    app.kubernetes.io/name: apptracker
+    app.kubernetes.io/part-of: apptracker

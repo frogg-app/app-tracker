@@ -1,0 +1,62 @@
+# Multi-stage build for Go agent
+# Stage 1: Build the agent binary
+FROM golang:1.21-alpine AS builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
+
+# Copy go mod files first for layer caching
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the agent with optimizations
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-w -s -X main.version=$(git describe --tags --always 2>/dev/null || echo 'dev')" \
+    -o /agent ./cmd/agent
+
+# Stage 2: Create minimal runtime image
+FROM alpine:3.19
+
+# Labels
+LABEL org.opencontainers.image.title="App Tracker Agent" \
+      org.opencontainers.image.description="Lightweight system discovery agent for Linux servers" \
+      org.opencontainers.image.vendor="App Tracker" \
+      org.opencontainers.image.source="https://github.com/app-tracker/app-tracker"
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata \
+    iproute2 \
+    procps \
+    lsof \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user (use 65532 to avoid conflicts)
+RUN addgroup -g 65532 apptracker && \
+    adduser -u 65532 -G apptracker -s /bin/sh -D apptracker
+
+# Copy binary from builder
+COPY --from=builder /agent /usr/local/bin/agent
+
+# Create config directory
+RUN mkdir -p /etc/apptracker && chown apptracker:apptracker /etc/apptracker
+
+# Switch to non-root user (can run as root if needed for full /proc access)
+# USER apptracker
+
+# Expose API port
+EXPOSE 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:9090/health || exit 1
+
+# Default command
+ENTRYPOINT ["/usr/local/bin/agent"]
+CMD ["--listen", "0.0.0.0:9090"]

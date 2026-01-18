@@ -1,0 +1,55 @@
+# App Tracker Ignore Patterns
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.local
+
+# Logs
+*.log
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Secrets (never commit!)
+*.pem
+*.key
+*.crt
+secrets/
