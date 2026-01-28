@@ -35,7 +35,7 @@ All 5 main application pages:
 
 ### Total Screenshots
 
-**Base Coverage**: 30 screenshots
+**Base Coverage**: 30 screenshots per browser project
 - 5 pages × 3 viewports × 2 themes = 30 screenshots
 
 **Additional Flow Screenshots**:
@@ -43,7 +43,9 @@ All 5 main application pages:
 - Mobile theme toggle: 2 screenshots
 - Responsive component tests: 6 screenshots
 
-**Total**: 41+ screenshots per test run
+**Total**: 41+ screenshots per browser project
+
+**Note**: Screenshots are organized by browser project (chromium by default for CI) to prevent conflicts when running tests across multiple browsers.
 
 ## Running Screenshot Tests
 
@@ -71,9 +73,9 @@ All 5 main application pages:
 
 ### Execute Screenshot Tests
 
-**Interactive Mode** (recommended for development):
+**Interactive Mode (visible browser)** (recommended for development):
 ```bash
-npm run test:screenshots
+npm run test:screenshots:headed
 ```
 
 **Headless Mode** (for CI/CD):
@@ -88,46 +90,47 @@ npm test
 
 ## Screenshot Organization
 
-Screenshots are organized in a hierarchical structure:
+Screenshots are organized by browser project (to avoid conflicts), then by viewport and theme:
 
 ```
 e2e/screenshots/
-├── mobile/
-│   ├── light/
-│   │   ├── dashboard.png
-│   │   ├── ports.png
-│   │   ├── services.png
-│   │   ├── processes.png
-│   │   └── containers.png
-│   └── dark/
-│       ├── dashboard.png
-│       ├── ports.png
-│       ├── services.png
-│       ├── processes.png
-│       └── containers.png
-├── tablet/
-│   ├── light/
-│   │   └── (same structure)
-│   └── dark/
-│       └── (same structure)
-├── desktop/
-│   ├── light/
-│   │   └── (same structure)
-│   └── dark/
-│       └── (same structure)
-├── mobile-flow/
-│   ├── 01-dashboard-closed-sidebar.png
-│   ├── 02-sidebar-open.png
-│   ├── 03-ports-page.png
-│   ├── 04-light-mode.png
-│   └── 05-dark-mode.png
-└── components/
-    ├── system-overview-mobile.png
-    ├── system-overview-desktop.png
-    ├── table-mobile.png
-    ├── containers-grid-mobile.png
-    ├── containers-grid-tablet.png
-    └── containers-grid-desktop.png
+├── chromium/                # Default project (single browser for efficiency)
+│   ├── mobile/
+│   │   ├── light/
+│   │   │   ├── dashboard.png
+│   │   │   ├── ports.png
+│   │   │   ├── services.png
+│   │   │   ├── processes.png
+│   │   │   └── containers.png
+│   │   └── dark/
+│   │       ├── dashboard.png
+│   │       ├── ports.png
+│   │       ├── services.png
+│   │       ├── processes.png
+│   │       └── containers.png
+│   ├── tablet/
+│   │   ├── light/
+│   │   │   └── (same structure)
+│   │   └── dark/
+│   │       └── (same structure)
+│   ├── desktop/
+│   │   ├── light/
+│   │   │   └── (same structure)
+│   │   └── dark/
+│   │       └── (same structure)
+│   ├── mobile-flow/
+│   │   ├── 01-dashboard-closed-sidebar.png
+│   │   ├── 02-sidebar-open.png
+│   │   ├── 03-ports-page.png
+│   │   ├── 04-light-mode.png
+│   │   └── 05-dark-mode.png
+│   └── components/
+│       ├── system-overview-mobile.png
+│       ├── system-overview-desktop.png
+│       ├── table-mobile.png
+│       ├── containers-grid-mobile.png
+│       ├── containers-grid-tablet.png
+│       └── containers-grid-desktop.png
 ```
 
 ## Mobile Support Checklist

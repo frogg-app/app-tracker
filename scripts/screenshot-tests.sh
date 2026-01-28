@@ -81,17 +81,20 @@ mkdir -p "$E2E_DIR/screenshots"
 cd "$E2E_DIR"
 
 # Check if headed mode is requested
+# Temporarily disable set -e to capture exit code and show helpful messages
+set +e
 if [[ "$1" == "--headed" ]] || [[ "$1" == "-h" ]]; then
     echo -e "${YELLOW}Running in headed mode (you'll see the browser)${NC}"
     echo ""
     npm run test:screenshots:headed
+    TEST_EXIT_CODE=$?
 else
     echo -e "${YELLOW}Running in headless mode${NC}"
     echo ""
     npm run test:screenshots
+    TEST_EXIT_CODE=$?
 fi
-
-TEST_EXIT_CODE=$?
+set -e
 
 echo ""
 if [ $TEST_EXIT_CODE -eq 0 ]; then

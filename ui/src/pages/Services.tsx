@@ -212,7 +212,7 @@ export function Services() {
         {filteredServices.length > 0 && (
           <div className="px-3 sm:px-4 py-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-700">
             Showing {filteredServices.length} service{filteredServices.length !== 1 ? 's' : ''}
-            <span className="hidden sm:inline"> • Swipe table to see more columns</span>
+            <span className="inline lg:hidden"> • Swipe table to see more columns</span>
           </div>
         )}
       </div>

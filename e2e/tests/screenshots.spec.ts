@@ -1,4 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 /**
  * Screenshot Testing Suite
@@ -67,7 +67,7 @@ test.describe('Screenshot Tests - Mobile Support Validation', () => {
         });
 
         for (const page of pages) {
-          test(`${page.name} page screenshot`, async ({ page: browserPage }) => {
+          test(`${page.name} page screenshot`, async ({ page: browserPage }, testInfo) => {
             // Navigate to the page
             await browserPage.goto(`http://localhost:3000${page.path}`);
             
@@ -81,19 +81,13 @@ test.describe('Screenshot Tests - Mobile Support Validation', () => {
               await disableDarkMode(browserPage);
             }
             
-            // Verify the page loaded correctly (optional check, doesn't fail test)
-            try {
-              await expect(browserPage.getByRole('heading', { name: page.heading })).toBeVisible({
-                timeout: 10000,
-              });
-            } catch (error) {
-              // Heading not found, but we'll still capture the screenshot
-              // This is acceptable as some pages may have dynamic headings
-              console.log(`Note: Heading not found for ${page.name}, capturing screenshot anyway`);
-            }
+            // Verify the page loaded correctly - require heading for proper validation
+            await expect(browserPage.getByRole('heading', { name: page.heading })).toBeVisible({
+              timeout: 10000,
+            });
             
-            // Take full-page screenshot
-            const screenshotPath = `screenshots/${viewport.name}/${theme}/${page.name}.png`;
+            // Take full-page screenshot with project name to avoid overwriting
+            const screenshotPath = `screenshots/${testInfo.project.name}/${viewport.name}/${theme}/${page.name}.png`;
             await browserPage.screenshot({
               path: screenshotPath,
               fullPage: true,
