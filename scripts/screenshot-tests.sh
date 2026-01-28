@@ -81,15 +81,15 @@ mkdir -p "$E2E_DIR/screenshots"
 cd "$E2E_DIR"
 
 # Check if headed mode is requested
-HEADED_FLAG=""
 if [[ "$1" == "--headed" ]] || [[ "$1" == "-h" ]]; then
-    HEADED_FLAG="--headed"
     echo -e "${YELLOW}Running in headed mode (you'll see the browser)${NC}"
     echo ""
+    npm run test:screenshots:headed
+else
+    echo -e "${YELLOW}Running in headless mode${NC}"
+    echo ""
+    npm run test:screenshots
 fi
-
-# Run screenshot tests
-npm run test:screenshots $HEADED_FLAG
 
 TEST_EXIT_CODE=$?
 

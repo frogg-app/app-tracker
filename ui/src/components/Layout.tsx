@@ -168,7 +168,7 @@ export function Layout({ children }: LayoutProps) {
                 <input
                   type="text"
                   data-search-input
-                  placeholder="Search... (Press /)"
+                  placeholder="Search processes, ports... (/)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="input pl-9 w-full text-sm sm:text-base"

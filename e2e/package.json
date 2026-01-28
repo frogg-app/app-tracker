@@ -8,8 +8,8 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:screenshots": "playwright test screenshots.spec.ts --headed",
-    "test:screenshots:ci": "playwright test screenshots.spec.ts"
+    "test:screenshots": "playwright test screenshots.spec.ts",
+    "test:screenshots:headed": "playwright test screenshots.spec.ts --headed"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",

@@ -72,11 +72,11 @@ export function SystemOverview({ system }: SystemOverviewProps) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-xs sm:text-sm">
-              <span className="font-medium text-slate-900 dark:text-white truncate">{system.hostname}</span>
+              <span className="font-medium text-slate-900 dark:text-white max-w-full">{system.hostname}</span>
               <span className="text-slate-500 dark:text-slate-400 truncate">
                 {system.platform} • {system.kernel_version}
               </span>
-              <span className="text-slate-500 dark:text-slate-400">
+              <span className="text-slate-500 dark:text-slate-400 whitespace-nowrap">
                 Load: {system.load_avg_1.toFixed(2)} / {system.load_avg_5.toFixed(2)} / {system.load_avg_15.toFixed(2)}
               </span>
             </div>

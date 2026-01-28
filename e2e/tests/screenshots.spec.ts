@@ -81,12 +81,16 @@ test.describe('Screenshot Tests - Mobile Support Validation', () => {
               await disableDarkMode(browserPage);
             }
             
-            // Verify the page loaded correctly
-            await expect(browserPage.getByRole('heading', { name: page.heading })).toBeVisible({
-              timeout: 10000,
-            }).catch(() => {
-              // If heading not found, that's okay for screenshot purposes
-            });
+            // Verify the page loaded correctly (optional check, doesn't fail test)
+            try {
+              await expect(browserPage.getByRole('heading', { name: page.heading })).toBeVisible({
+                timeout: 10000,
+              });
+            } catch (error) {
+              // Heading not found, but we'll still capture the screenshot
+              // This is acceptable as some pages may have dynamic headings
+              console.log(`Note: Heading not found for ${page.name}, capturing screenshot anyway`);
+            }
             
             // Take full-page screenshot
             const screenshotPath = `screenshots/${viewport.name}/${theme}/${page.name}.png`;
@@ -118,7 +122,7 @@ test.describe('Mobile Navigation Flow', () => {
     });
     
     // Open mobile sidebar
-    const menuButton = page.locator('button').filter({ has: page.locator('svg') }).first();
+    const menuButton = page.getByRole('button', { name: /open navigation/i });
     await menuButton.click();
     await page.waitForTimeout(300);
     
@@ -149,10 +153,8 @@ test.describe('Mobile Navigation Flow', () => {
       path: 'screenshots/mobile-flow/04-light-mode.png',
     });
     
-    // Toggle to dark mode
-    const themeToggle = page.locator('button').filter({ 
-      has: page.locator('svg') 
-    }).nth(1); // Second button is usually theme toggle
+    // Toggle to dark mode - use the specific test ID
+    const themeToggle = page.getByTestId('theme-toggle');
     
     await themeToggle.click();
     await page.waitForTimeout(300);
