@@ -7,7 +7,9 @@
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug"
+    "test:debug": "playwright test --debug",
+    "test:screenshots": "playwright test screenshots.spec.ts --headed",
+    "test:screenshots:ci": "playwright test screenshots.spec.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
