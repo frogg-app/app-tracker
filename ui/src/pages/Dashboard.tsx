@@ -22,8 +22,8 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+        <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
           System overview and real-time metrics
         </p>
       </div>
@@ -32,7 +32,7 @@ export function Dashboard() {
       
       <ResourceCharts />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <PortsPreview ports={data.ports} />
         <ServicesPreview services={data.systemdUnits} />
       </div>

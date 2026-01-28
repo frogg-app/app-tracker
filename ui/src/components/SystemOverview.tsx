@@ -46,34 +46,34 @@ export function SystemOverview({ system }: SystemOverviewProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {cards.map((card) => (
-        <div key={card.name} className="card p-4">
+        <div key={card.name} className="card p-3 sm:p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{card.name}</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{card.name}</p>
+              <p className="mt-1 text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white">
                 {card.value}
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{card.detail}</p>
             </div>
-            <div className={`p-3 rounded-lg ${colorClasses[card.color as keyof typeof colorClasses]}`}>
-              <card.icon className="w-6 h-6" />
+            <div className={`p-2 sm:p-3 rounded-lg ${colorClasses[card.color as keyof typeof colorClasses]}`}>
+              <card.icon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
       ))}
       
       {/* Host info card */}
-      <div className="card p-4 sm:col-span-2 lg:col-span-4">
+      <div className="card p-3 sm:p-4 sm:col-span-2 lg:col-span-4">
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
-            <Server className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+          <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg flex-shrink-0">
+            <Server className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 dark:text-slate-300" />
           </div>
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-              <span className="font-medium text-slate-900 dark:text-white">{system.hostname}</span>
-              <span className="text-slate-500 dark:text-slate-400">
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-xs sm:text-sm">
+              <span className="font-medium text-slate-900 dark:text-white truncate">{system.hostname}</span>
+              <span className="text-slate-500 dark:text-slate-400 truncate">
                 {system.platform} • {system.kernel_version}
               </span>
               <span className="text-slate-500 dark:text-slate-400">

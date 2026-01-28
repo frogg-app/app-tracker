@@ -56,7 +56,8 @@ export function Layout({ children }: LayoutProps) {
             <span className="text-lg font-bold text-primary-500">App Tracker</span>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="p-2 min-w-[44px] min-h-[44px] rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center"
+              aria-label="Close navigation menu"
             >
               <X className="w-5 h-5" />
             </button>
@@ -155,7 +156,8 @@ export function Layout({ children }: LayoutProps) {
             <div className="flex items-center flex-1">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="p-2 -ml-2 rounded-md lg:hidden hover:bg-slate-100 dark:hover:bg-slate-700"
+                className="p-2 -ml-2 min-w-[44px] min-h-[44px] rounded-md lg:hidden hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center"
+                aria-label="Open navigation menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -166,10 +168,10 @@ export function Layout({ children }: LayoutProps) {
                 <input
                   type="text"
                   data-search-input
-                  placeholder="Search processes, ports, services... (Press /)"
+                  placeholder="Search... (Press /)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input pl-9 w-full"
+                  className="input pl-9 w-full text-sm sm:text-base"
                 />
               </div>
             </div>
@@ -177,8 +179,10 @@ export function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-2">
               <button
                 onClick={toggle}
-                className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                data-testid="theme-toggle"
+                className="p-2 min-w-[44px] min-h-[44px] rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center"
                 title="Toggle theme (D)"
+                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {isDark ? (
                   <Sun className="w-5 h-5" />
@@ -187,8 +191,9 @@ export function Layout({ children }: LayoutProps) {
                 )}
               </button>
               <button
-                className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                className="p-2 min-w-[44px] min-h-[44px] rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center"
                 title="Help (?)"
+                aria-label="Show keyboard shortcuts"
               >
                 <HelpCircle className="w-5 h-5" />
               </button>
