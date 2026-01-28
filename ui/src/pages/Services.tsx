@@ -72,62 +72,62 @@ export function Services() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center">
-            <Cog className="w-7 h-7 mr-2" />
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center">
+            <Cog className="w-6 h-6 sm:w-7 sm:h-7 mr-2" />
             Systemd Services
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Monitor and manage systemd units
           </p>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <button
           onClick={() => setStateFilter('all')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             stateFilter === 'all' && 'ring-2 ring-primary-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Total</p>
-          <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Total</p>
+          <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
         </button>
         <button
           onClick={() => setStateFilter('active')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             stateFilter === 'active' && 'ring-2 ring-green-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Active</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.active}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Active</p>
+          <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{stats.active}</p>
         </button>
         <button
           onClick={() => setStateFilter('inactive')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             stateFilter === 'inactive' && 'ring-2 ring-slate-400'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Inactive</p>
-          <p className="text-2xl font-bold text-slate-600 dark:text-slate-300">{stats.inactive}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Inactive</p>
+          <p className="text-xl sm:text-2xl font-bold text-slate-600 dark:text-slate-300">{stats.inactive}</p>
         </button>
         <button
           onClick={() => setStateFilter('failed')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             stateFilter === 'failed' && 'ring-2 ring-red-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Failed</p>
-          <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Failed</p>
+          <p className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
         </button>
       </div>
 
       {/* Search */}
-      <div className="relative max-w-md">
+      <div className="relative w-full sm:max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
           type="text"
@@ -144,13 +144,13 @@ export function Services() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50">
-                <th className="px-4 py-3 font-medium w-10"></th>
-                <th className="px-4 py-3 font-medium">Service</th>
-                <th className="px-4 py-3 font-medium">State</th>
-                <th className="px-4 py-3 font-medium">Sub-state</th>
-                <th className="px-4 py-3 font-medium">Since</th>
-                <th className="px-4 py-3 font-medium">Main PID</th>
-                <th className="px-4 py-3 font-medium">Memory</th>
+                <th className="px-3 sm:px-4 py-3 font-medium w-8 sm:w-10"></th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">Service</th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">State</th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap hidden sm:table-cell">Sub-state</th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap hidden md:table-cell">Since</th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap hidden lg:table-cell">Main PID</th>
+                <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap hidden lg:table-cell">Memory</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
@@ -159,42 +159,42 @@ export function Services() {
                   key={service.name}
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
-                  <td className="px-4 py-3">{getStateIcon(service.active_state)}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-3 sm:px-4 py-3">{getStateIcon(service.active_state)}</td>
+                  <td className="px-3 sm:px-4 py-3">
                     <div>
-                      <p className="font-medium text-slate-900 dark:text-white">
+                      <p className="font-medium text-slate-900 dark:text-white text-xs sm:text-sm truncate max-w-[120px] sm:max-w-[200px]">
                         {service.name}
                       </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 hidden sm:block">
                         {service.description}
                       </p>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={clsx('badge', getStateBadge(service.active_state))}>
+                  <td className="px-3 sm:px-4 py-3">
+                    <span className={clsx('badge text-xs', getStateBadge(service.active_state))}>
                       {service.active_state}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-3 sm:px-4 py-3 text-slate-600 dark:text-slate-300 hidden sm:table-cell text-xs sm:text-sm">
                     {service.sub_state}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-3 sm:px-4 py-3 text-slate-600 dark:text-slate-300 hidden md:table-cell text-xs sm:text-sm">
                     {service.active_enter_timestamp
                       ? formatUptime(
                           Math.floor((Date.now() - new Date(service.active_enter_timestamp).getTime()) / 1000)
                         )
                       : '-'}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-3 sm:px-4 py-3 hidden lg:table-cell">
                     {service.main_pid > 0 ? (
-                      <span className="font-mono text-slate-600 dark:text-slate-300">
+                      <span className="font-mono text-slate-600 dark:text-slate-300 text-xs sm:text-sm">
                         {service.main_pid}
                       </span>
                     ) : (
                       <span className="text-slate-400">-</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-3 sm:px-4 py-3 text-slate-600 dark:text-slate-300 hidden lg:table-cell text-xs sm:text-sm">
                     {service.memory_current
                       ? `${(service.memory_current / 1024 / 1024).toFixed(1)} MB`
                       : '-'}
@@ -207,6 +207,12 @@ export function Services() {
         {filteredServices.length === 0 && (
           <div className="px-4 py-12 text-center text-slate-400 dark:text-slate-500">
             No services match your search criteria
+          </div>
+        )}
+        {filteredServices.length > 0 && (
+          <div className="px-3 sm:px-4 py-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-700">
+            Showing {filteredServices.length} service{filteredServices.length !== 1 ? 's' : ''}
+            <span className="inline lg:hidden"> • Swipe table to see more columns</span>
           </div>
         )}
       </div>

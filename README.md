@@ -64,13 +64,14 @@ Services (host ports):
 
 ### Modern UI/UX
 - React + TypeScript SPA
-- Mobile-responsive dashboards
+- **Fully mobile-responsive design** with touch-friendly interactions
 - Searchable/filterable service list
 - Color-coded port/service maps
 - Drill-down detail panels
 - Dark/Light themes
 - Keyboard shortcuts (see below)
 - Clear onboarding flow
+- **Screenshot-based testing** for visual regression detection
 
 ## 🏗️ Architecture
 
@@ -239,7 +240,33 @@ pnpm test:integration
 
 # End-to-end tests (requires Docker)
 pnpm test:e2e
+
+# Screenshot tests for mobile/desktop validation
+cd e2e && npm run test:screenshots
 ```
+
+### Mobile Support Testing
+
+We use comprehensive screenshot testing to validate mobile responsiveness:
+
+- **3 Viewports**: Mobile (375×667), Tablet (768×1024), Desktop (1920×1080)
+- **2 Themes**: Light and Dark mode
+- **5 Pages**: All application pages tested
+- **41+ Screenshots**: Complete visual documentation
+
+See [e2e/SCREENSHOT_TESTING.md](e2e/SCREENSHOT_TESTING.md) for details.
+
+## 📱 Mobile Support
+
+App Tracker is designed to work seamlessly on mobile devices:
+
+- **Responsive Design**: Optimized layouts for mobile (375px), tablet (768px), and desktop (1920px+)
+- **Touch-Friendly**: All interactive elements meet 44×44px minimum touch target size
+- **Progressive Tables**: Tables hide less critical columns on smaller screens
+- **Mobile Navigation**: Slide-out sidebar with overlay for mobile devices
+- **Optimized Performance**: Reduced data and chart complexity on mobile
+
+For detailed mobile development guidelines, see [docs/MOBILE_SUPPORT.md](docs/MOBILE_SUPPORT.md).
 
 ## 📁 Repository Structure
 
@@ -314,7 +341,9 @@ See [docs/PLUGINS.md](docs/PLUGINS.md) for detailed examples.
 - [x] Service list view
 - [x] Real-time charts
 - [x] Dark/light theme
-- [ ] Mobile optimization (in progress)
+- [x] Mobile optimization with responsive design
+- [x] Touch-friendly interactions (44×44px targets)
+- [x] Screenshot testing infrastructure
 
 ### Phase 4: Production Ready
 - [x] TLS support

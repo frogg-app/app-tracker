@@ -67,61 +67,61 @@ export function Containers() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center">
-          <Container className="w-7 h-7 mr-2" />
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center">
+          <Container className="w-6 h-6 sm:w-7 sm:h-7 mr-2" />
           Containers
         </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
           Docker and container runtime instances
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <button
           onClick={() => setStatusFilter('all')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             statusFilter === 'all' && 'ring-2 ring-primary-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Total</p>
-          <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Total</p>
+          <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
         </button>
         <button
           onClick={() => setStatusFilter('running')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             statusFilter === 'running' && 'ring-2 ring-green-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Running</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.running}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Running</p>
+          <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{stats.running}</p>
         </button>
         <button
           onClick={() => setStatusFilter('exited')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             statusFilter === 'exited' && 'ring-2 ring-slate-400'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Exited</p>
-          <p className="text-2xl font-bold text-slate-600 dark:text-slate-300">{stats.exited}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Exited</p>
+          <p className="text-xl sm:text-2xl font-bold text-slate-600 dark:text-slate-300">{stats.exited}</p>
         </button>
         <button
           onClick={() => setStatusFilter('paused')}
           className={clsx(
-            'card p-4 text-left transition-all',
+            'card p-3 sm:p-4 text-left transition-all',
             statusFilter === 'paused' && 'ring-2 ring-yellow-500'
           )}
         >
-          <p className="text-sm text-slate-500 dark:text-slate-400">Paused</p>
-          <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.paused}</p>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Paused</p>
+          <p className="text-xl sm:text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.paused}</p>
         </button>
       </div>
 
       {/* Search */}
-      <div className="relative max-w-md">
+      <div className="relative w-full sm:max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
           type="text"
@@ -134,37 +134,37 @@ export function Containers() {
 
       {/* Containers Grid */}
       {filteredContainers.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredContainers.map((container) => (
             <div key={container.id} className="card p-4 space-y-3">
               <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
                   {getStateIcon(container.state)}
-                  <h3 className="font-semibold text-slate-900 dark:text-white truncate">
+                  <h3 className="font-semibold text-slate-900 dark:text-white truncate text-sm sm:text-base">
                     {container.name}
                   </h3>
                 </div>
-                <span className={clsx('badge', getStateBadge(container.state))}>
+                <span className={clsx('badge text-xs', getStateBadge(container.state))}>
                   {container.state}
                 </span>
               </div>
 
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Image</span>
-                  <span className="text-slate-700 dark:text-slate-300 truncate ml-2 max-w-[200px]">
+              <div className="space-y-1 text-xs sm:text-sm">
+                <div className="flex justify-between gap-2">
+                  <span className="text-slate-500 dark:text-slate-400 flex-shrink-0">Image</span>
+                  <span className="text-slate-700 dark:text-slate-300 truncate text-right">
                     {container.image}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">ID</span>
-                  <span className="font-mono text-slate-600 dark:text-slate-300">
+                <div className="flex justify-between gap-2">
+                  <span className="text-slate-500 dark:text-slate-400 flex-shrink-0">ID</span>
+                  <span className="font-mono text-slate-600 dark:text-slate-300 text-xs">
                     {container.id.substring(0, 12)}
                   </span>
                 </div>
                 {container.state === 'running' && container.started_at && (
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 dark:text-slate-400">Uptime</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-slate-500 dark:text-slate-400 flex-shrink-0">Uptime</span>
                     <span className="text-slate-700 dark:text-slate-300">
                       {formatUptime(
                         Math.floor((Date.now() - new Date(container.started_at).getTime()) / 1000)
@@ -239,10 +239,10 @@ export function Containers() {
       ) : (
         <div className="card p-12 text-center">
           <Container className="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" />
-          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white mb-1">
             No containers found
           </h3>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             {data.containers?.length === 0
               ? 'No containers are running on this host'
               : 'No containers match your search criteria'}

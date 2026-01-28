@@ -31,11 +31,11 @@ export function ResourceCharts() {
 
   if (chartData.length < 2) {
     return (
-      <div className="card p-6">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4">
+      <div className="card p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white mb-4">
           Resource Usage Over Time
         </h3>
-        <div className="h-64 flex items-center justify-center text-slate-400 dark:text-slate-500">
+        <div className="h-48 sm:h-64 flex items-center justify-center text-slate-400 dark:text-slate-500 text-xs sm:text-sm">
           Collecting data... Charts will appear shortly.
         </div>
       </div>
@@ -43,13 +43,13 @@ export function ResourceCharts() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
       {/* CPU Chart */}
-      <div className="card p-4">
-        <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">
+      <div className="card p-3 sm:p-4">
+        <h3 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white mb-3 sm:mb-4">
           CPU Usage (%)
         </h3>
-        <div className="h-48">
+        <div className="h-40 sm:h-48">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
@@ -93,11 +93,11 @@ export function ResourceCharts() {
       </div>
 
       {/* Memory Chart */}
-      <div className="card p-4">
-        <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">
+      <div className="card p-3 sm:p-4">
+        <h3 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white mb-3 sm:mb-4">
           Memory Usage (%)
         </h3>
-        <div className="h-48">
+        <div className="h-40 sm:h-48">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
@@ -141,11 +141,11 @@ export function ResourceCharts() {
       </div>
 
       {/* Load Average Chart */}
-      <div className="card p-4 lg:col-span-2">
-        <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">
+      <div className="card p-3 sm:p-4 lg:col-span-2">
+        <h3 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white mb-3 sm:mb-4">
           System Load & Resources
         </h3>
-        <div className="h-48">
+        <div className="h-40 sm:h-48">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
