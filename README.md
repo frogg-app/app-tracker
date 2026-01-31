@@ -18,7 +18,7 @@ cd app-tracker
 ./scripts/demo.sh
 ```
 
-This boots the complete stack with sample data. Access the UI at **http://localhost:32400**
+This boots the complete stack with sample data. Access the UI at **http://localhost:5010**
 
 ### Docker Compose (Recommended)
 
@@ -27,9 +27,9 @@ docker-compose up --build
 ```
 
 Services (host ports):
-- **UI**: http://localhost:32400
-- **API**: http://localhost:32401
-- **Agent**: http://localhost:32402/metrics
+- **UI**: http://localhost:5010
+- **API**: http://localhost:5011
+- **Agent**: http://localhost:5012/metrics
 
 ## 📦 Features
 
@@ -197,8 +197,8 @@ security:
 
 All components expose Prometheus metrics (internal service ports shown; host port mappings documented above):
 
-- **Agent (internal)**: `http://agent:9090/metrics` (host: `http://localhost:32402/metrics`)
-- **Server (internal)**: `http://server:3001/metrics` (host: `http://localhost:32401/metrics`)
+- **Agent (internal)**: `http://agent:9090/metrics` (host: `http://localhost:5012/metrics`)
+- **Server (internal)**: `http://server:3001/metrics` (host: `http://localhost:5011/metrics`)
 
 ### Structured Logging
 

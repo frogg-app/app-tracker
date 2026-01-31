@@ -1,7 +1,7 @@
 # App Tracker - Full Stack Deployment
 # Run: docker compose up -d
-# Dashboard: http://localhost:32400
-# API: http://localhost:32401
+# Dashboard: http://localhost:5010
+# API: http://localhost:5011
 
 services:
   # ===========================================
@@ -14,7 +14,7 @@ services:
     container_name: apptracker-server
     restart: unless-stopped
     ports:
-      - "32401:3001"
+      - "5011:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
@@ -23,7 +23,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
       - JWT_EXPIRES_IN=24h
       - LOG_LEVEL=info
-      - CORS_ORIGINS=http://localhost:32400,http://localhost:5173
+      - CORS_ORIGINS=http://localhost:5010,http://localhost:5173
     volumes:
       - server-data:/app/data
     healthcheck:
@@ -45,7 +45,7 @@ services:
     container_name: apptracker-ui
     restart: unless-stopped
     ports:
-      - "32400:80"
+      - "5010:80"
     environment:
       - API_URL=/api
       - WS_URL=/ws
@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
     privileged: true
     ports:
-      - "32402:9090"
+      - "5012:9090"
     environment:
       - APPTRACKER_SERVER_URL=http://server:3001
       - APPTRACKER_AGENT_ID=demo-agent-docker

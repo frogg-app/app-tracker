@@ -54,7 +54,7 @@ Keep a Changelog style and Semantic Versioning.
 
 ### Changed
 - Docker / infra
-  - Updated `docker-compose.yml` host port mappings: UI -> 32400, API -> 32401, Agent -> 32402.
+  - Updated `docker-compose.yml` host port mappings: UI -> 5010, API -> 5011, Agent -> 5012.
   - `ui/nginx.conf` updated to proxy `/api/` and `/ws` to the server (fixed WebSocket routing).
   - Agent Dockerfile: expose `9090` and listen on `0.0.0.0` in container runtime.
   - Non-root user group GID adjusted for container builds.

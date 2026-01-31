@@ -33,15 +33,15 @@ The application has been updated to use **real data** from agents instead of fak
 
 ```bash
 # Agent collects real data
-curl http://localhost:32402/api/v1/data
+curl http://localhost:5012/api/v1/data
 # Returns: processes, ports, system info from agent container
 
 # Server receives and aggregates data
-curl http://localhost:32401/api/v1/data
+curl http://localhost:5011/api/v1/data
 # Returns: Real data pushed from agents
 
 # UI displays real data via WebSocket
-# Open http://localhost:32400 in browser
+# Open http://localhost:5010 in browser
 ```
 
 ---
@@ -93,10 +93,10 @@ dial unix /var/run/dbus/system_bus_socket: connect: no such file or directory
 docker compose -f docker-compose.yml --profile with-agent up -d
 
 # Verify data flow
-curl http://localhost:32401/api/v1/data
+curl http://localhost:5011/api/v1/data
 
 # Access UI
-open http://localhost:32400
+open http://localhost:5010
 ```
 
 ---
