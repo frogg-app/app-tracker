@@ -1,0 +1,27 @@
+# Jenkins Build Configuration
+# This file is read by the Jenkins pipeline to configure the build
+
+# Build settings
+build:
+  # Docker build arguments (optional)
+  args: []
+  # Build context (defaults to .)
+  context: .
+  # Dockerfile path (defaults to Dockerfile)
+  dockerfile: Dockerfile
+
+# Deploy settings  
+deploy:
+  # Health check endpoint (optional)
+  healthCheck: /api/health
+  # Startup timeout in seconds
+  timeout: 60
+
+# Environment variables for build
+env: {}
+
+# Pre-build commands (run before docker build)
+preBuild: []
+
+# Post-deploy commands (run after container starts)
+postDeploy: []
