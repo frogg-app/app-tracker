@@ -1,11 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "=== Building apptrackr ==="
+# =============================================================================
+# App Tracker Build Script (Docker Compose multi-service project)
+# =============================================================================
 
-# Build all Docker images via compose
-docker-compose build || docker compose build
+echo "=== Building App Tracker (docker-compose) ==="
 
-# Configure git
+# Build all services with docker compose
+docker compose build --no-cache
+
+# Tag the built images for versioning
+docker tag app-tracker-server:latest app-tracker:${VERSION:-latest}
+docker tag app-tracker-server:latest app-tracker:${ENVIRONMENT:-dev}
 
 echo "Build completed successfully!"
