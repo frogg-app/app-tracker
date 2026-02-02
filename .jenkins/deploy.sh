@@ -46,6 +46,11 @@ docker run -d \
   -e HOST=0.0.0.0 \
   -e DATABASE_PATH=/app/data/apptracker.db \
   -e CORS_ORIGINS=https://apptrackr.frogg.app,http://localhost:5010 \
+  --health-cmd "wget --no-verbose --tries=1 --spider http://127.0.0.1:3001/health || exit 1" \
+  --health-interval 30s \
+  --health-timeout 5s \
+  --health-retries 3 \
+  --health-start-period 10s \
   --restart unless-stopped \
   app-tracker-server:latest
 
